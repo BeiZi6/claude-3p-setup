@@ -45,6 +45,28 @@ if [[ ! -d "$CLAUDE_DIR" ]]; then
 fi
 mkdir -p "$LIB_DIR"
 
+# ---------- 开发者模式检查 ----------
+DEV_SETTINGS="$CLAUDE_DIR/developer_settings.json"
+if [[ ! -f "$DEV_SETTINGS" ]] || ! grep -q '"allowDevTools".*true' "$DEV_SETTINGS" 2>/dev/null; then
+  warn "开发者模式未开启"
+  if [[ "$(prompt "是否自动开启开发者模式?" "y")" =~ ^[Yy] ]]; then
+    echo '{"allowDevTools":true}' > "$DEV_SETTINGS"
+    ok "已开启开发者模式 (developer_settings.json)"
+    warn "请重启 Claude Desktop 使开发者模式生效"
+    warn "重启后，请在 Settings > Developer 中手动开启「Third-party inference」"
+    warn "然后重新运行本脚本"
+    if [[ "$(prompt "现在重启 Claude Desktop?" "y")" =~ ^[Yy] ]]; then
+      osascript -e 'tell application "Claude" to quit' 2>/dev/null || true
+      sleep 1
+      open -a "Claude" 2>/dev/null || true
+      ok "已重启，请在 Settings > Developer 中开启第三方推理后重新运行脚本"
+    fi
+    exit 0
+  else
+    warn "跳过开发者模式，继续配置（可能不生效）"
+  fi
+fi
+
 # ---------- 预设网关 ----------
 # name|baseUrl|描述
 PRESETS=(

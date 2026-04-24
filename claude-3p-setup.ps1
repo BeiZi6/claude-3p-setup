@@ -48,6 +48,40 @@ function Ensure-Dir {
     if (-not (Test-Path $LibDir)) { New-Item -ItemType Directory -Path $LibDir -Force | Out-Null }
 }
 
+function Ensure-DevMode {
+    $DevSettings = Join-Path $ClaudeDir 'developer_settings.json'
+    $needEnable = $false
+    if (-not (Test-Path $DevSettings)) {
+        $needEnable = $true
+    } else {
+        $content = Get-Content -Path $DevSettings -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($content.allowDevTools -ne $true) { $needEnable = $true }
+    }
+    if ($needEnable) {
+        Write-Warn '开发者模式未开启'
+        $ans = Prompt-Input '是否自动开启开发者模式?' 'y'
+        if ($ans -match '^[Yy]') {
+            '{"allowDevTools":true}' | Set-Content -Path $DevSettings -Encoding UTF8
+            Write-Ok '已开启开发者模式 (developer_settings.json)'
+            Write-Warn '请重启 Claude Desktop 使开发者模式生效'
+            Write-Warn '重启后，请在 Settings > Developer 中手动开启「Third-party inference」'
+            Write-Warn '然后重新运行本脚本'
+            $restart = Prompt-Input '现在重启 Claude Desktop?' 'y'
+            if ($restart -match '^[Yy]') {
+                $proc = Get-Process -Name 'Claude' -ErrorAction SilentlyContinue
+                if ($proc) { $proc | Stop-Process -Force; Start-Sleep -Seconds 1 }
+                $app = Get-ChildItem "$env:LOCALAPPDATA\Claude\*.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+                if (-not $app) { $app = Get-ChildItem "$env:PROGRAMFILES\Claude\*.exe" -ErrorAction SilentlyContinue | Select-Object -First 1 }
+                if ($app) { Start-Process $app.FullName }
+                Write-Ok '已重启，请在 Settings > Developer 中开启第三方推理后重新运行脚本'
+            }
+            exit 0
+        } else {
+            Write-Warn '跳过开发者模式，继续配置（可能不生效）'
+        }
+    }
+}
+
 function Ensure-Meta {
     if (-not (Test-Path $MetaFile)) {
         '{"appliedId":null,"entries":[]}' | Set-Content -Path $MetaFile -Encoding UTF8
@@ -130,6 +164,7 @@ function Prompt-Secret {
 
 # ---------- 主流程 ----------
 Ensure-Dir
+Ensure-DevMode
 
 if ($List) {
     Show-Profiles
