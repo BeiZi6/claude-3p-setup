@@ -52,18 +52,32 @@ if [[ ! -f "$DEV_SETTINGS" ]] || ! grep -q '"allowDevTools".*true' "$DEV_SETTING
   if [[ "$(prompt "是否自动开启开发者模式?" "y")" =~ ^[Yy] ]]; then
     echo '{"allowDevTools":true}' > "$DEV_SETTINGS"
     ok "已开启开发者模式 (developer_settings.json)"
-    warn "请重启 Claude Desktop 使开发者模式生效"
-    warn "重启后，请在 Settings > Developer 中手动开启「Third-party inference」"
-    warn "然后重新运行本脚本"
-    if [[ "$(prompt "现在重启 Claude Desktop?" "y")" =~ ^[Yy] ]]; then
-      osascript -e 'tell application "Claude" to quit' 2>/dev/null || true
-      sleep 1
-      open -a "Claude" 2>/dev/null || true
-      ok "已重启，请在 Settings > Developer 中开启第三方推理后重新运行脚本"
-    fi
-    exit 0
   else
     warn "跳过开发者模式，继续配置（可能不生效）"
+  fi
+fi
+
+# ---------- 第三方推理检查 ----------
+DESKTOP_CONFIG="$CLAUDE_DIR/claude_desktop_config.json"
+NEED_3P=false
+if [[ ! -f "$DESKTOP_CONFIG" ]]; then
+  NEED_3P=true
+elif ! grep -q '"deploymentMode".*"3p"' "$DESKTOP_CONFIG" 2>/dev/null; then
+  NEED_3P=true
+fi
+if [[ "$NEED_3P" == "true" ]]; then
+  warn "第三方推理 (Third-party inference) 未开启"
+  if [[ "$(prompt "是否自动开启第三方推理?" "y")" =~ ^[Yy] ]]; then
+    if [[ -f "$DESKTOP_CONFIG" ]]; then
+      # 用 jq 合并写入 deploymentMode
+      tmp=$(mktemp)
+      jq '.deploymentMode = "3p"' "$DESKTOP_CONFIG" > "$tmp" && mv "$tmp" "$DESKTOP_CONFIG"
+    else
+      echo '{"deploymentMode":"3p","enterpriseConfig":{},"preferences":{}}' > "$DESKTOP_CONFIG"
+    fi
+    ok "已开启第三方推理 (deploymentMode: 3p)"
+  else
+    warn "跳过第三方推理，继续配置（可能不生效）"
   fi
 fi
 
