@@ -94,6 +94,7 @@ This script creates/updates these JSON files with proper structure and activates
 | xyucode (Recommended) | `https://tt.xyucode.top/` | ¥0.5/credit, official relay, MAX 1x |
 | Custom | — | Enter your own URL |
 | AnyRouter | `https://anyrouter.top/` | Anthropic-compatible relay |
+| DeepSeek | `https://api.deepseek.com/anthropic` | Official Anthropic-compatible endpoint |
 
 ## License
 

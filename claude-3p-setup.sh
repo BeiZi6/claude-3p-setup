@@ -45,49 +45,13 @@ if [[ ! -d "$CLAUDE_DIR" ]]; then
 fi
 mkdir -p "$LIB_DIR"
 
-# ---------- 开发者模式检查 ----------
-DEV_SETTINGS="$CLAUDE_DIR/developer_settings.json"
-if [[ ! -f "$DEV_SETTINGS" ]] || ! grep -q '"allowDevTools".*true' "$DEV_SETTINGS" 2>/dev/null; then
-  warn "开发者模式未开启"
-  if [[ "$(prompt "是否自动开启开发者模式?" "y")" =~ ^[Yy] ]]; then
-    echo '{"allowDevTools":true}' > "$DEV_SETTINGS"
-    ok "已开启开发者模式 (developer_settings.json)"
-  else
-    warn "跳过开发者模式，继续配置（可能不生效）"
-  fi
-fi
-
-# ---------- 第三方推理检查 ----------
-DESKTOP_CONFIG="$CLAUDE_DIR/claude_desktop_config.json"
-NEED_3P=false
-if [[ ! -f "$DESKTOP_CONFIG" ]]; then
-  NEED_3P=true
-elif ! grep -q '"deploymentMode".*"3p"' "$DESKTOP_CONFIG" 2>/dev/null; then
-  NEED_3P=true
-fi
-if [[ "$NEED_3P" == "true" ]]; then
-  warn "第三方推理 (Third-party inference) 未开启"
-  if [[ "$(prompt "是否自动开启第三方推理?" "y")" =~ ^[Yy] ]]; then
-    if [[ -f "$DESKTOP_CONFIG" ]]; then
-      # 用 jq 合并写入 deploymentMode
-      tmp=$(mktemp)
-      jq '.deploymentMode = "3p"' "$DESKTOP_CONFIG" > "$tmp" && mv "$tmp" "$DESKTOP_CONFIG"
-    else
-      echo '{"deploymentMode":"3p","enterpriseConfig":{},"preferences":{}}' > "$DESKTOP_CONFIG"
-    fi
-    ok "已开启第三方推理 (deploymentMode: 3p)"
-  else
-    warn "跳过第三方推理，继续配置（可能不生效）"
-  fi
-fi
-
 # ---------- 预设网关 ----------
 # name|baseUrl|描述
 PRESETS=(
-  "xyucode 中转 ★推荐|https://tt.xyucode.top/|0.5 元一刀额度, 官转 MAX 倍率 1 开头"
+  "xyucode 中转 ★推荐|https://tt.xyucode.top/|0.5 美元一刀, 官转 MAX 倍率 1 开头"
   "自定义 (手动输入)|__custom__|手动输入 Base URL"
   "AnyRouter|https://anyrouter.top|Anthropic 兼容中转"
-  "DeepSeek (OpenAI 兼容,需网关转换)|https://api.deepseek.com|需外层做协议转换"
+  "DeepSeek (Anthropic 兼容)|https://api.deepseek.com/anthropic|DeepSeek 官方 Anthropic 兼容端点"
   "Moonshot Kimi (OpenAI 兼容)|https://api.moonshot.cn|需外层做协议转换"
 )
 

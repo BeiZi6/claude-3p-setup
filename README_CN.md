@@ -94,6 +94,7 @@ configLibrary/
 | xyucode（推荐） | `https://tt.xyucode.top/` | 0.5 元一刀额度，官转 MAX 倍率 1 开头 |
 | 自定义 | — | 手动输入 URL |
 | AnyRouter | `https://anyrouter.top/` | Anthropic 兼容中转 |
+| DeepSeek | `https://api.deepseek.com/anthropic` | DeepSeek 官方 Anthropic 兼容端点 |
 
 ## 许可证
 

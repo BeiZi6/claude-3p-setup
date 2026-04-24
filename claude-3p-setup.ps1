@@ -30,10 +30,10 @@ function Write-Err   { param($Msg) Write-Host "✗  $Msg" -ForegroundColor Red }
 
 # ---------- 预设网关 ----------
 $Presets = @(
-    @{ Name = 'xyucode 中转 ★推荐';               Url = 'https://tt.xyucode.top/';  Desc = '0.5 元一刀额度, 官转 MAX 倍率 1 开头' }
+    @{ Name = 'xyucode 中转 ★推荐';               Url = 'https://tt.xyucode.top/';  Desc = '0.5 美元一刀, 官转 MAX 倍率 1 开头' }
     @{ Name = '自定义 (手动输入)';                   Url = '__custom__';               Desc = '手动输入 Base URL' }
     @{ Name = 'AnyRouter';                          Url = 'https://anyrouter.top/';   Desc = 'Anthropic 兼容中转' }
-    @{ Name = 'DeepSeek (OpenAI 兼容,需网关转换)';   Url = 'https://api.deepseek.com/'; Desc = '需外层做协议转换' }
+    @{ Name = 'DeepSeek (Anthropic 兼容)';   Url = 'https://api.deepseek.com/anthropic'; Desc = 'DeepSeek 官方 Anthropic 兼容端点' }
     @{ Name = 'Moonshot Kimi (OpenAI 兼容)';        Url = 'https://api.moonshot.cn/';  Desc = '需外层做协议转换' }
 )
 
@@ -46,54 +46,6 @@ function Ensure-Dir {
         exit 1
     }
     if (-not (Test-Path $LibDir)) { New-Item -ItemType Directory -Path $LibDir -Force | Out-Null }
-}
-
-function Ensure-DevMode {
-    $DevSettings = Join-Path $ClaudeDir 'developer_settings.json'
-    $needEnable = $false
-    if (-not (Test-Path $DevSettings)) {
-        $needEnable = $true
-    } else {
-        $content = Get-Content -Path $DevSettings -Raw -Encoding UTF8 | ConvertFrom-Json
-        if ($content.allowDevTools -ne $true) { $needEnable = $true }
-    }
-    if ($needEnable) {
-        Write-Warn '开发者模式未开启'
-        $ans = Prompt-Input '是否自动开启开发者模式?' 'y'
-        if ($ans -match '^[Yy]') {
-            '{"allowDevTools":true}' | Set-Content -Path $DevSettings -Encoding UTF8
-            Write-Ok '已开启开发者模式 (developer_settings.json)'
-        } else {
-            Write-Warn '跳过开发者模式，继续配置（可能不生效）'
-        }
-    }
-}
-
-function Ensure-3pInference {
-    $DesktopConfig = Join-Path $ClaudeDir 'claude_desktop_config.json'
-    $need3p = $false
-    if (-not (Test-Path $DesktopConfig)) {
-        $need3p = $true
-    } else {
-        $content = Get-Content -Path $DesktopConfig -Raw -Encoding UTF8 | ConvertFrom-Json
-        if ($content.deploymentMode -ne '3p') { $need3p = $true }
-    }
-    if ($need3p) {
-        Write-Warn '第三方推理 (Third-party inference) 未开启'
-        $ans = Prompt-Input '是否自动开启第三方推理?' 'y'
-        if ($ans -match '^[Yy]') {
-            if (Test-Path $DesktopConfig) {
-                $cfg = Get-Content -Path $DesktopConfig -Raw -Encoding UTF8 | ConvertFrom-Json
-                $cfg | Add-Member -NotePropertyName 'deploymentMode' -NotePropertyValue '3p' -Force
-                $cfg | ConvertTo-Json -Depth 10 | Set-Content -Path $DesktopConfig -Encoding UTF8
-            } else {
-                '{"deploymentMode":"3p","enterpriseConfig":{},"preferences":{}}' | Set-Content -Path $DesktopConfig -Encoding UTF8
-            }
-            Write-Ok '已开启第三方推理 (deploymentMode: 3p)'
-        } else {
-            Write-Warn '跳过第三方推理，继续配置（可能不生效）'
-        }
-    }
 }
 
 function Ensure-Meta {
@@ -178,8 +130,6 @@ function Prompt-Secret {
 
 # ---------- 主流程 ----------
 Ensure-Dir
-Ensure-DevMode
-Ensure-3pInference
 
 if ($List) {
     Show-Profiles
