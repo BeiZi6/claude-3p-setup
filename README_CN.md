@@ -1,5 +1,7 @@
 # claude-3p-setup
 
+[English](README.md)
+
 一键为 **Claude Desktop** 配置第三方 API 网关的交互式脚本（需开启开发者模式及第三方推理）。
 
 > **推荐中转**: [tt.xyucode.top](https://tt.xyucode.top/) — 0.5 美元一刀，官转 MAX 倍率 1 开头。

@@ -1,5 +1,7 @@
 # claude-3p-setup
 
+[中文文档](README_CN.md)
+
 One-click setup script for configuring third-party API gateways in **Claude Desktop** (with Developer Mode & third-party inference enabled).
 
 > **Sponsor**: [tt.xyucode.top](https://tt.xyucode.top/) — $0.5 per credit, official relay, MAX rate starting from 1x.
