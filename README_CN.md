@@ -2,7 +2,11 @@
 
 [English](README.md)
 
-一键为 **Claude Desktop** 配置第三方 API 网关的交互式脚本（需开启开发者模式及第三方推理）。
+一键为 **Claude Code Desktop** 配置第三方 API 网关的交互式脚本（需开启开发者模式及第三方推理）。
+
+本工具帮助小白快速在 Claude Code Desktop 中配置第三方 API 中转服务。使用官转可以享受 **1 小时 Prompt Cache** — 大幅降低延迟和成本。
+
+![1h 缓存演示](images/1h-cache-demo.jpg)
 
 > **推荐中转**: [tt.xyucode.top](https://tt.xyucode.top/) — 0.5 元一刀额度，官转 MAX 倍率 1 开头。
 

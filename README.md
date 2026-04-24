@@ -2,7 +2,11 @@
 
 [中文文档](README_CN.md)
 
-One-click setup script for configuring third-party API gateways in **Claude Desktop** (with Developer Mode & third-party inference enabled).
+One-click setup script for configuring third-party API gateways in **Claude Code Desktop** (with Developer Mode & third-party inference enabled).
+
+This tool helps beginners quickly set up third-party API relay services in Claude Code Desktop. With official relay, you can enjoy **1-hour prompt cache** — significantly reducing latency and cost.
+
+![1h Cache Demo](images/1h-cache-demo.jpg)
 
 > **Sponsor**: [tt.xyucode.top](https://tt.xyucode.top/) — ¥0.5 per credit, official relay, MAX rate starting from 1x.
 
