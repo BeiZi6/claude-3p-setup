@@ -30,7 +30,7 @@ function Write-Err   { param($Msg) Write-Host "✗  $Msg" -ForegroundColor Red }
 
 # ---------- 预设网关 ----------
 $Presets = @(
-    @{ Name = 'xyucode 中转 ★推荐';               Url = 'https://tt.xyucode.top/';  Desc = '0.5 美元一刀, 官转 MAX 倍率 1 开头' }
+    @{ Name = 'xyucode 中转 ★推荐';               Url = 'https://tt.xyucode.top/';  Desc = '0.5 元一刀额度, 官转 MAX 倍率 1 开头' }
     @{ Name = '自定义 (手动输入)';                   Url = '__custom__';               Desc = '手动输入 Base URL' }
     @{ Name = 'AnyRouter';                          Url = 'https://anyrouter.top/';   Desc = 'Anthropic 兼容中转' }
     @{ Name = 'DeepSeek (OpenAI 兼容,需网关转换)';   Url = 'https://api.deepseek.com/'; Desc = '需外层做协议转换' }

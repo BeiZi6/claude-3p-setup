@@ -48,7 +48,7 @@ mkdir -p "$LIB_DIR"
 # ---------- 预设网关 ----------
 # name|baseUrl|描述
 PRESETS=(
-  "xyucode 中转 ★推荐|https://tt.xyucode.top/|0.5 美元一刀, 官转 MAX 倍率 1 开头"
+  "xyucode 中转 ★推荐|https://tt.xyucode.top/|0.5 元一刀额度, 官转 MAX 倍率 1 开头"
   "自定义 (手动输入)|__custom__|手动输入 Base URL"
   "AnyRouter|https://anyrouter.top|Anthropic 兼容中转"
   "DeepSeek (OpenAI 兼容,需网关转换)|https://api.deepseek.com|需外层做协议转换"

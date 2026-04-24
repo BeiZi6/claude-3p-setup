@@ -4,7 +4,7 @@
 
 One-click setup script for configuring third-party API gateways in **Claude Desktop** (with Developer Mode & third-party inference enabled).
 
-> **Sponsor**: [tt.xyucode.top](https://tt.xyucode.top/) — $0.5 per credit, official relay, MAX rate starting from 1x.
+> **Sponsor**: [tt.xyucode.top](https://tt.xyucode.top/) — ¥0.5 per credit, official relay, MAX rate starting from 1x.
 
 ## Features
 
@@ -87,7 +87,7 @@ This script creates/updates these JSON files with proper structure and activates
 
 | Preset | URL | Note |
 |--------|-----|------|
-| xyucode (Recommended) | `https://tt.xyucode.top/` | $0.5/credit, official relay, MAX 1x |
+| xyucode (Recommended) | `https://tt.xyucode.top/` | ¥0.5/credit, official relay, MAX 1x |
 | Custom | — | Enter your own URL |
 | AnyRouter | `https://anyrouter.top/` | Anthropic-compatible relay |
 
